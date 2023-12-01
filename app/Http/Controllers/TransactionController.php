@@ -18,13 +18,14 @@ class TransactionController extends Controller
         return view('transaction.index', compact('datas'));
     }
 
-    public function Tambah($id){
+    public function Tambah($id)
+    {
         $item = Item::findorfail($id);
         $cart = session()->get('cart');
-        if(isset($cart[$id])){
+        if (isset($cart[$id])) {
             $cart[$id]['qty'] += 1;
             $cart[$id]['subtotal'] = $item->price * $cart[$id]['qty'];
-        }else {
+        } else {
             $cart[$id] = [
                 "id" => $item->id,
                 "name" => $item->name,
@@ -35,8 +36,21 @@ class TransactionController extends Controller
         session()->put('cart', $cart);
         return redirect()->route('transaction')->with('message', 'Berhasil Menambahkan Data');
     }
+
+    public function Update(Request $request)
+    {
+        $item = Item::findorfail($request->id);
+        $cart = session('cart');
+
+        $cart[$request->id]['qty'] = $request->qty;
+        $cart[$request->id]['subtotal'] = $item->price * $request->qty;
+        session()->put('cart', $cart);
+        return redirect()->route('transaction')->with('message', 'Berhasil Mengupdate Data');
+
+    }
     public function Delete($id)
     {
+
         $cart = session('cart');
 
         if (isset($cart[$id])) {

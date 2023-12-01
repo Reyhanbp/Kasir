@@ -45,9 +45,9 @@ Route::get('/transaction', [TransactionController::class, 'Index'])->name('trans
 Route::get('/tambah-transaction/{id}', [TransactionController::class, 'Tambah'])->name('tambahtransaction');
 Route::post('/send-transaction', [TransactionController::class, 'Send'])->name('Send-transaction');
 Route::get('/edit-transaction/{id}', [TransactionController::class, 'Edit'])->name('edit-transaction');
-Route::post('/update-transaction/{id}', [TransactionController::class, 'Update'])->name('update-transaction');
-Route::DELETE('/delete-transaction/{id}', [TransactionController::class, 'Delete'])->name('delete-transaction');
-Route::get('/transaction/reset', function(){
-    Session::forget('cart');
-    return route('transaction.index');
-})->name('resettransaction');
+Route::post('/update-transaction', [TransactionController::class, 'Update'])->name('update-transaction');
+Route::get('/delete-transaction/{id}', [TransactionController::class, 'Delete'])->name('delete-transaction');
+// Route::get('/transaction/reset', function(){
+//     Session::forget('cart');
+//     return route('transaction.index');
+// })->name('resettransaction');

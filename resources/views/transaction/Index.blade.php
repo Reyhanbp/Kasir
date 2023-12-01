@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-7">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h4>{{ __('Master Transaction') }}</h4>
@@ -58,11 +58,11 @@
                                             <td>{{$transaction -> stock }}</td>
                                             <td>Rp. {{number_format ($transaction -> price) }}</td>
                                             <td class="text-center align-middle">
-                                                    <a class="btn btn-warning" role="button"
-                                                        href="{{ route ('tambahtransaction', $transaction->id) }}">
-                                                        <i class="fas fa-edit"></i>
-                                                        Add Cart
-                                                    </a>
+                                                <a class="btn btn-warning" role="button"
+                                                    href="{{ route ('tambahtransaction', $transaction->id) }}">
+                                                    <i class="fas fa-edit"></i>
+                                                    Add Cart
+                                                </a>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -83,7 +83,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-5">
             <div class="card">
                 <div class="card-header">
                     Cart
@@ -103,26 +103,37 @@
                         <tr>
                             <td>{{$loop->iteration }}</td>
                             <td>{{$item['name'] }}</td>
-                            <td><input class="form-control" type="number" min="0" style="width: 50px;" value="{{$item['qty']}}"></td>
-                            <td>Rp. {{ number_format($item['subtotal']) }}</td>
-
-                            <td>
-                                <form action="{{ route ('delete-transaction', $item['id']) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button id="deleteButton" class="btn btn-danger" role="button">
-                                        <i class="fas fa-trash"></i>
-                                        delete
-                                    </button>
-                                </form>
-                            </td>
-                            @endforeach
-                        @else
-                            <tr>
-                                <td colspan="5 " class="text-center">
-                                    no item in cart
+                            <form action="{{route('update-transaction')}}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="id" value="{{$item['id']}}">
+                                <td>
+                                    <input class="form-control" type="number" onchange="ubah{{ $loop->iteration }}()"
+                                        name="qty" min="0" style="width: 60px;" value="{{$item['qty']}}">
                                 </td>
-                            </tr>
+                                <td>Rp. {{ number_format($item['subtotal']) }}</td>
+                                <td>
+                                    <a class="btn btn-sm btn-danger" id="delete{{ $loop->iteration }}"
+                                        href="{{ route ('delete-transaction', $item['id']) }}">
+                                        delete
+                                    </a>
+                                    <input id="update{{ $loop->iteration }}" type="submit" style="display: none"
+                                        class="btn btn-sm btn-primary" value="update">
+                                </td>
+                                <script>
+                                    function ubah{{ $loop->iteration }} (){
+                                        $('#delete{{ $loop->iteration }}').hide();
+                                        $('#update{{ $loop->iteration }}').show();
+
+                                    }
+                                </script>
+                            </form>
+                            @endforeach
+                            @else
+                        <tr>
+                            <td colspan="5 " class="text-center">
+                                no item in cart
+                            </td>
+                        </tr>
                         </tr>
                         @endif
                     </table>

@@ -18,6 +18,7 @@
       <hr>
         <form action="{{route('Send-category')}}" method="POST" enctype="multipart/form-data">
           @csrf
+          
         <div class="card-body">
         <div class="row">
           <div class="col-12">
