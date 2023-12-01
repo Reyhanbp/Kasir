@@ -98,8 +98,10 @@
                             <th>Action</th>
                         </thead>
 
+                        @php $total = 0; @endphp
                         @if(session('cart'))
                         @foreach (session('cart') as $item)
+                        @php $total += $item['subtotal']; @endphp
                         <tr>
                             <td>{{$loop->iteration }}</td>
                             <td>{{$item['name'] }}</td>
@@ -141,13 +143,13 @@
                         <tr>
                             <td class="text-end" colspan="3"><strong>Grand Total</strong></td>
                             <td>
-                                <input type="number" class="form-control" readonly>
+                                <input type="number" class="form-control" value="{{ $total }}"  readonly>
                             </td>
                         </tr>
                         <tr>
                             <td class="text-end" colspan="3"><strong>Pay Total</strong></td>
                             <td>
-                                <input type="number" class="form-control" readonly>
+                                <input type="number" name="pay_total"  id="pay_total" class="form-control" min="{{ $total }}" >
                             </td>
                         </tr>
                         <tr>
