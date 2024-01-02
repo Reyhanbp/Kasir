@@ -29,7 +29,7 @@ class TransactionController extends Controller
             $cart[$id] = [
                 "id" => $item->id,
                 "name" => $item->name,
-                "qty" => $item->qty,
+                "qty" => 1,
                 "subtotal" => $item->price,
             ];
         }
@@ -43,7 +43,7 @@ class TransactionController extends Controller
         $cart = session('cart');
 
         $cart[$request->id]['qty'] = $request->qty;
-        $cart[$request->id]['subtotal'] = $item->price * $request->qty;
+        $cart[$request->id]['subtotal'] = $item->price *= $request->qty;
         session()->put('cart', $cart);
         return redirect()->route('transaction')->with('message', 'Berhasil Mengupdate Data');
 
