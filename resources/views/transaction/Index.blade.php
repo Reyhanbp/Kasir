@@ -110,7 +110,7 @@
                                 <input type="hidden" name="id" value="{{$item['id']}}">
                                 <td>
                                     <input class="form-control" type="number" onchange="ubah{{ $loop->iteration }}()"
-                                        name="qty" min="0" style="width: 60px;" value="{{$item['qty']}}">
+                                        name="qty" min="1" style="width: 60px;" value="{{$item['qty']}}">
                                 </td>
                                 <td>Rp. {{ number_format($item['subtotal']) }}</td>
                                 <td>
@@ -122,7 +122,7 @@
                                         class="btn btn-sm btn-primary" value="update">
                                 </td>
                                 <script>
-                                    function ubah{{ $loop->iteration }} (){
+                                    function ubah{ { $loop -> iteration } } (){
                                         $('#delete{{ $loop->iteration }}').hide();
                                         $('#update{{ $loop->iteration }}').show();
 
@@ -140,41 +140,46 @@
                         @endif
                     </table>
                     <table class="table">
-                        <tr>
-                            <td class="text-end" colspan="3"><strong>Grand Total</strong></td>
-                            <td>
-                                <input id="total" type="number" class="form-control" value="{{ $total }}"  readonly>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-end" colspan="3"><strong>Pay Total</strong></td>
-                            <td>
-                                <input type="number" name="pay_total" onkeyup="hitung()" id="pay_total"  class="form-control" min="{{  $total  }}" >
-                            </td>
-                        </tr>
+                        <form action="{{route('transaction.store')}}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <tr>
+                                <td class="text-end" colspan="3"><strong>Grand Total</strong></td>
+                                <td>
+                                    <input id="total" name="total" type="number" class="form-control"
+                                        value="{{ $total }}" readonly>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-end" colspan="3"><strong>Pay Total</strong></td>
+                                <td>
+                                    <input type="number" name="pay_total" onkeyup="hitung()" id="pay_total"
+                                        class="form-control" min="{{  $total  }}">
+                                </td>
+                            </tr>
 
-                        <script>
-                            function hitung(){
-                                var bayar = $('#pay_total').val();
-                                var total = $('#total').val();
-                                var change = bayar - total;
-                                $('#change').val(change);
-                            }
-                        </script>
+                            <script>
+                                function hitung() {
+                                    var bayar = $('#pay_total').val();
+                                    var total = $('#total').val();
+                                    var change = bayar - total;
+                                    $('#change').val(change);
+                                }
+                            </script>
 
-                        <tr>
-                            <td class="text-end" colspan="3"><strong>Change</strong></td>
-                            <td>
-                                <input type="number" class="form-control" name="change" id="change" readonly>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-end" colspan="6">
-                                <input type="submit" class="btn btn-success" value="Checkout">
-                                <input class="btn btn-danger" value="reset">
-                            </td>
-                        </tr>
+                            <tr>
+                                <td class="text-end" colspan="3"><strong>Change</strong></td>
+                                <td>
+                                    <input type="number" class="form-control" name="change" id="change" readonly>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-end" colspan="6">
+                                    <input type="submit" class="btn btn-success" value="Checkout">
+                                    <input class="btn btn-danger" value="reset">
+                                </td>
+                            </tr>
                     </table>
+                    </form>
 
 
                 </div>

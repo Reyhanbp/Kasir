@@ -2,6 +2,15 @@
 
 @section('content')
 <div class="container">
+    @if (count($errors) > 0)
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{$error}}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
     <div class="row">
         <div class="col-md-7">
             <div class="card">
@@ -54,8 +63,7 @@
                                         <form action="{{ route ('delete-item', $item->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <a class="btn btn-warning" role="button"
-                                                href="{{ route ('edit-item', $item->id) }}">
+                                            <a class="btn btn-warning" role="button" onclick="edit({{$item->id}}) ">
                                                 <i class="fas fa-edit"></i>
                                                 Edit
                                             </a>
@@ -80,52 +88,47 @@
         </div>
         <div class="col-md-5">
             <div class="card">
-                <div class="card-header">
+                <div id="Judul" class="card-header">
                     Tambah item
                 </div>
                 <div class="card-body">
-                    <form action="{{route('Send-item')}}" method="POST" enctype="multipart/form-data">
+                    <form id="createItem" action="{{route('Send-item')}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="card-body">
                             <div class="row">
-                                 <div class="col-12">
+                                <div class="col-12">
                                     <div class="mb-3">
-                                        <label for="category_id" class="form-label required"> User Group : </label>
-                                        <select
-                                        class="form-control"
-                                        name="category_id"
-                                        placeholder="Pilih category_id"
-                                        id="category_id"
-                                        required
-                                        >
+                                        <label for="category_id" class="form-label required"> Category : </label>
+                                        <select class="form-control" name="category_id" placeholder="Pilih category_id"
+                                            id="category_id">
 
-                                        <option value="">Pilih</option>
-                                        @foreach ($category as $Category)
-                                        <option value="{{$Category -> id}}">{{$Category -> name}}</option>
-                                        @endforeach
+                                            <option value="">Pilih</option>
+                                            @foreach ($category as $Category)
+                                            <option value="{{$Category -> id}}">{{$Category -> name}}</option>
+                                            @endforeach
 
                                         </select>
                                     </div>
-                                    </div>
+                                </div>
                                 <div class="col-12">
                                     <div class="mb-3">
                                         <label for="name" class="form-label required"> Name : </label>
                                         <input type="text" name="name" id="name" placeholder="Name" class="form-control"
-                                            required autoComplete="off" />
+                                            autoComplete="off" />
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="mb-3">
                                         <label for="price" class="form-label required"> Price : </label>
-                                        <input type="number" name="price" id="name" placeholder="Price" class="form-control"
-                                            required autoComplete="off" />
+                                        <input type="number" name="price" id="price" placeholder="Price"
+                                            class="form-control" autoComplete="off" />
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="mb-3">
                                         <label for="stock" class="form-label required"> Stock : </label>
-                                        <input type="number" name="stock" id="name" placeholder="Stock" class="form-control"
-                                            required autoComplete="off" />
+                                        <input type="number" name="stock" id="stock" placeholder="Stock"
+                                            class="form-control" autoComplete="off" />
                                     </div>
                                 </div>
                             </div>
@@ -134,7 +137,7 @@
                                     <i class="fas fa-save"></i>
                                     Simpan
                                 </button>
-                                <button type="reset" class="btn btn-danger">
+                                <button type="reset" class="btn btn-danger" onclick="batal()">
                                     <i class="fas fa-save"></i>
                                     Reset
                                 </button>
@@ -147,4 +150,28 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    function edit(a) {
+        document.getElementById("Judul").innerHTML = "Edit Item";
+        $.get('/edit-item/' + a, function (data) {
+            $('#category_id').val(data.category_id);
+            $('#name').val(data.name);
+            $('#price').val(data.price);
+            $('#stock').val(data.stock);
+            var action = '{{route("update-item", ":id") }}';
+            action = action.replace(":id", data.id);
+            $("#createItem").attr("action", action);
+            $("input[name='_method']").val("PUT");
+        })
+    }
+    function batal() {
+        document.getElementById("Judul").innerHTML = "Tambah item";
+        var action = '{{route("Send-item", ":id") }}';
+        $("#createItem").attr("action", action);
+        $('#category_id').val("");
+        $('#name').val("");
+        $('#price').val("");
+        $('#stock').val("");
+    }
+</script>
 @endsection

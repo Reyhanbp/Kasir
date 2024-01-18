@@ -19,7 +19,7 @@ class TransactionDetail extends Model
     {
         return $this->belongsTo(Transaction::class, 'transaction_id');
     }
-    public function items()
+    public function item()
     {
         return $this->belongsTo(Item::class,'item_id');
     }

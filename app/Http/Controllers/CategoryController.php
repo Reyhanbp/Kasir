@@ -34,13 +34,21 @@ class CategoryController extends Controller
     }
     public function Delete($id)
     {
-        Category::destroy($id);
+        $data = Category::find($id);
+        if ($data->items()->exists()) {
+            return redirect()->route('category')->with('error', 'kategori masih memiliki relasi');
+        };
+        $data->delete($id);
         return redirect()->route('category')->with('message', 'Berhasil Menghapus Data');
     }
     public function Send(Request $request)
     {
+        $request->validate(
+            [
+                'name' => 'required|string|min:5|unique:categories'
+            ]
+        );
         Category::create($request->all());
         return redirect()->route('category')->with('message', 'Berhasil Menambahkan Data');
-
     }
 }

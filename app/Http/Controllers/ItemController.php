@@ -15,7 +15,7 @@ class ItemController extends Controller
         $data = Item::where(function ($q) use ($request) {
             $q->where('name', 'LIKE', '%' . $request->search . '%');
         })->orderBy('id', 'asc')->paginate($pagination);
-        return view('item.index', compact('data','category'));
+        return view('item.index', compact('data', 'category'));
     }
     public function Tambah()
     {
@@ -24,13 +24,13 @@ class ItemController extends Controller
     public function Edit($id)
     {
         $item = Item::find($id);
-        return view('item.Edit', compact('item'));
+        return $item;
     }
     public function Update(Request $request, $id)
     {
         $item = Item::find($id);
         $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|min:5',
             'category_id' => 'required|integer',
             'price' => 'required|integer',
             'stock' => 'required|integer',
@@ -56,7 +56,7 @@ class ItemController extends Controller
     public function Send(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|min:5',
             'category_id' => 'required|integer',
             'price' => 'required|integer',
             'stock' => 'required|integer',
